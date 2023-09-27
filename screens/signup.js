@@ -72,6 +72,7 @@ const Signup = () => {
     const isUsername = isValidName(userData.name);
 
     try {
+      validator(isValidEmail, isUsername, isPassword, isPhoneNumber);
       const response = await createUser(userData);
       if (response.status === "sucess") {
         setUserData({ ...userData });

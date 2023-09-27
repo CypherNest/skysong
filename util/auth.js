@@ -36,3 +36,7 @@ export async function login(payload) {
 
   return response.data;
 }
+
+export async function addBank() {
+  const response = axios.get(`${url}/api/V1/skyshowNG/addBank?acc`);
+}

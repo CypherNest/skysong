@@ -6,7 +6,7 @@ export function isEmail(emailAdress) {
 
 export function isValidPhone(phone) {
   if (phone.length === 11) return true;
-  else return false;
+  return false;
 }
 
 export function isValidPassword(pass1, pass2) {
