@@ -86,7 +86,6 @@ const { backgroundColor, inputPlaceholder, white } = Colors;
 
 const Home = ({ navigation, route }) => {
   const ctx = useContext(Context);
-  console.log(ctx.token);
   // const { name, balance } = route.params || {};
   const { email, phoneNumber } = route.params || {};
 

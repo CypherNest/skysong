@@ -7,11 +7,10 @@ import axios from "axios";
 //   );
 //   return response.data;
 // };
-const url = `https://d753-105-113-60-81.ngrok-free.app`;
+const url = `https://d50c-197-210-28-193.ngrok-free.app`;
 
 export async function createUser(payload) {
   const response = await axios.post(`${url}/api/V1/skyshowNG/signUp`, payload);
-  console.log(response.data, "response");
   return response.data;
 }
 
@@ -33,10 +32,54 @@ export async function verifyEmailAndNumber(option, data) {
 
 export async function login(payload) {
   const response = await axios.post(`${url}/api/V1/skyshowNG/login`, payload);
-
   return response.data;
 }
 
 export async function addBank() {
   const response = axios.get(`${url}/api/V1/skyshowNG/addBank?acc`);
+}
+
+export async function generateBTC(token) {
+  const headers = {
+    authorization: `Bearer ${token}`,
+    "Content-Type": "Application/json",
+  };
+
+  const response = await axios.get(
+    `${url}/api/V1/skyshowNG/btc_Wallet_Address`,
+    {
+      headers,
+    }
+  );
+  return response.data;
+}
+
+export async function generateEthereumWallet(token) {
+  const headers = {
+    authorization: `Bearer ${token}`,
+    "Content-Type": "Application/json",
+  };
+
+  const response = await axios.get(
+    `${url}/api/V1/skyshowNG/generateEtheriumWallet`,
+    {
+      headers,
+    }
+  );
+  return response.data;
+}
+
+export async function generateUsdt(token) {
+  const headers = {
+    authorization: `Bearer ${token}`,
+    "Content-Type": "Application/json",
+  };
+
+  const response = await axios.get(
+    `${url}/api/V1/skyshowNG/generateTetherAddress`,
+    {
+      headers,
+    }
+  );
+  return response.data;
 }

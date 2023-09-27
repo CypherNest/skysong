@@ -4,7 +4,7 @@ import { date } from "yup";
 
 const defaultState = {
   name: "",
-  authToken: "",
+  token: "",
   wallet_Balance: "",
   email: "",
 };
@@ -54,7 +54,7 @@ export default function Provider({ children }) {
   }
   const value = {
     // states
-    token: state.authToken,
+    token: state.token,
     name: state.name,
     wallet_Balance: state.wallet_Balance,
     email: state.email,

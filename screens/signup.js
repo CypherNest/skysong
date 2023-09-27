@@ -72,7 +72,7 @@ const Signup = () => {
     const isUsername = isValidName(userData.name);
 
     try {
-      validator(isValidEmail, isUsername, isPassword, isPhoneNumber);
+      // validator(isValidEmail, isUsername, isPassword, isPhoneNumber);
       const response = await createUser(userData);
       if (response.status === "sucess") {
         setUserData({ ...userData });
@@ -99,7 +99,7 @@ const Signup = () => {
           <InnerContainer>
             <StyledFormArea>
               <StyledTextInput
-                placeholder="Username"
+                placeholder="Full name"
                 placeholderTextColor={inputPlaceholder}
                 onChangeText={(text) => {
                   setUserData({ ...userData, name: text });

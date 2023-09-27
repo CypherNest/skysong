@@ -47,29 +47,28 @@ const Login = ({ navigation }) => {
   }
 
   const loginHandler = async () => {
-    validator(isEmail(userData.email));
+    // validator(isEmail(userData.email));
     try {
       setIsButtonDisabled(true);
-      console.log(userData);
       const result = await login(userData);
-      console.log("result", result);
       const { name, wallet_Balance } = result.data;
-      const params = {
-        token: result.jwtToken,
-        wallet_Balance,
-        name,
-      };
-      ctx.saveCredential(params);
-      console.log(name, wallet_Balance, "57");
-      console.log(result.status);
+
+      // ctx.saveCredential(params);
       if (result.status === "success") {
-        // setUserData({ ...userData });
+        const params = {
+          token: result.jwtToken,
+          wallet_Balance,
+          name,
+        };
+        ctx.saveCredential(params);
+
         navigation.navigate("MainContent", {
           email: userData.email,
           phoneNumber: userData.phoneNumber,
         });
       }
     } catch (error) {
+      console.log(error);
       setErrorMessage(error.message);
     } finally {
       // setSubmitting(false);

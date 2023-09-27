@@ -1,126 +1,141 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StatusBar, Linking, Image } from "react-native";
 import { View, Text, TouchableOpacity } from "react-native";
-import { Octicons } from '@expo/vector-icons';
-import * as Clipboard from 'expo-clipboard';
-import QRCode from 'react-native-qrcode-svg';
+import { Octicons } from "@expo/vector-icons";
+import * as Clipboard from "expo-clipboard";
+import QRCode from "react-native-qrcode-svg";
 
 //////components--------
 import {
-    StyledContainer,
-    Colors,
-    MainContainer,
-    ScreenTitles,
-    WalletAddressContainer,
-    WalletAddressTitle,
-    DownloadQrCode,
-    DownloadQrCodeText,
-    CryptoInputContainer,
-    CryptoCopyBtn,
-    CryptoAddressInput,
-    ButtonText,
-    CryptoAddressDetails,
-    StyledButtonVarient,
-    ButtonTextBlue,
-    StatusAlert,
-    StatusAlertText
-} from '../styles/styles';
+  StyledContainer,
+  Colors,
+  MainContainer,
+  ScreenTitles,
+  WalletAddressContainer,
+  WalletAddressTitle,
+  DownloadQrCode,
+  DownloadQrCodeText,
+  CryptoInputContainer,
+  CryptoCopyBtn,
+  CryptoAddressInput,
+  ButtonText,
+  CryptoAddressDetails,
+  StyledButtonVarient,
+  ButtonTextBlue,
+  StatusAlert,
+  StatusAlertText,
+} from "../styles/styles";
 
 import { SafeAreaView } from "react-native-safe-area-context";
+import { generateBTC } from "../util/auth";
+import { Context } from "../store/context";
 
-const { backgroundColor, inputPlaceholder, white} = Colors;
-
+const { backgroundColor, inputPlaceholder, white } = Colors;
 
 const GenerateBtcWallet = ({ navigation }) => {
-    const [walletAddress, setWalletAddress] = useState('');
-    const [isQrCodeGenerated, setIsQrCodeGenerated] = useState(false);
-    const [copyMessageVisible, setCopyMessageVisible] = useState(false);
+  // getting token from store
+  const ctx = useContext(Context);
+  const { token } = ctx;
 
-    useEffect(() => {
-        // Generate a random BTC wallet address when the component mounts
-        const randomAddress = generateRandomBtcAddress();
-        setWalletAddress(randomAddress);
-        setIsQrCodeGenerated(false); // Reset the QR code flag
-    }, []);
+  const [walletAddress, setWalletAddress] = useState("");
+  const [isError, setisError] = useState("");
+  const [isQrCodeGenerated, setIsQrCodeGenerated] = useState(false);
+  const [copyMessageVisible, setCopyMessageVisible] = useState(false);
 
-    const generateRandomBtcAddress = () => {
-        // Replace this with your BTC address generation logic
-        // For demonstration purposes, we'll generate a random string here
-        return Math.random().toString(36).substring(2, 15);
-    };
+  useEffect(() => {
+    // Generate a random BTC wallet address when the component mounts
+    const randomAddress = generateRandomBtcAddress();
+    setWalletAddress(randomAddress);
+    setIsQrCodeGenerated(false); // Reset the QR code flag
+  }, []);
 
-    const handleCopy = () => {
-        Clipboard.setStringAsync(walletAddress);
-        setCopyMessageVisible(true);
-        // Hide the message after a certain duration (e.g., 2 seconds)
-        setTimeout(() => {
-            setCopyMessageVisible(false);
-        }, 10000);
-    };
+  const generateRandomBtcAddress = async () => {
+    console.log(token, "token");
+    try {
+      const result = await generateBTC(token);
+      /// set Wallet Address here to the result response from the api
+      // set Wallet Address here to the result response from the api
+      // set Wallet Address here to the result response from the api
+      console.log(result, "result");
+    } catch (error) {
+      setisError(error.message);
+      console.log(error.message);
+    }
+    // Replace this with your BTC address generation logic
+    // For demonstration purposes, we'll generate a random string here
+    return Math.random().toString(36).substring(2, 15);
+  };
 
-    const handleDownloadQrCode = () => {
-        // Generate and download the QR code (save it to the device or send it to an API to get a download link)
-        // For simplicity, we'll just show an alert here
-        alert('QR code downloaded');
-    };
+  const handleCopy = () => {
+    Clipboard.setStringAsync(walletAddress);
+    setCopyMessageVisible(true);
+    // Hide the message after a certain duration (e.g., 2 seconds)
+    setTimeout(() => {
+      setCopyMessageVisible(false);
+    }, 10000);
+  };
 
-    const handleOpenQrCode = () => {
-        setIsQrCodeGenerated(true);
-    };
+  const handleDownloadQrCode = () => {
+    // Generate and download the QR code (save it to the device or send it to an API to get a download link)
+    // For simplicity, we'll just show an alert here
+    alert("QR code downloaded");
+  };
 
-    return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <StyledContainer>
-                <StatusBar style="light" backgroundColor={backgroundColor} />
-                <MainContainer>
-                    <ScreenTitles>BTC Wallet</ScreenTitles>
-                    {copyMessageVisible && (
-                            <View style={{ backgroundColor: '#fff' }}>
-                                <Text style={{ color: {backgroundColor}}}>Copied</Text>
-                            </View>
-                        )}
-                    <WalletAddressContainer>
-                        <WalletAddressTitle>Btc Wallet Address</WalletAddressTitle>
-                        {isQrCodeGenerated ? (
-                            <QRCode
-                                value={walletAddress}
-                                size={200}
-                                backgroundColor="white"
-                                color="black"
-                            />
-                        ) : (
-                            <Image
-                                source={require("../assets/images/qrcode.png")} // You can replace this with your actual QR code
-                                style={{ width: 200, height: 200 }}
-                            />
-                        )}
-                        <DownloadQrCode onPress={handleDownloadQrCode}>
-                            <Octicons name="download" size={18} color={white} />
-                            <DownloadQrCodeText>Download QR Code</DownloadQrCodeText>
-                        </DownloadQrCode>
-                        <CryptoInputContainer>
-                            <CryptoAddressInput value={walletAddress} />
-                            <CryptoCopyBtn onPress={handleCopy}>
-                                <ButtonText>Copy</ButtonText>
-                            </CryptoCopyBtn>
-                        </CryptoInputContainer>
-                       
-                        <CryptoAddressDetails>
-                            You can receive BTC with the QR code or address
-                            above. It would automatically be converted and added to your
-                            account balance.
-                        </CryptoAddressDetails>
-                        <StyledButtonVarient>
-                            <ButtonTextBlue onPress={handleOpenQrCode}>View BTC rates</ButtonTextBlue>
-                        </StyledButtonVarient>
-                    </WalletAddressContainer>
-                </MainContainer>
-            </StyledContainer>
-        </SafeAreaView>
-    );
+  const handleOpenQrCode = () => {
+    setIsQrCodeGenerated(true);
+  };
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <StyledContainer>
+        <StatusBar style="light" backgroundColor={backgroundColor} />
+        <MainContainer>
+          <ScreenTitles>BTC Wallet</ScreenTitles>
+          {copyMessageVisible && (
+            <View style={{ backgroundColor: "#fff" }}>
+              <Text style={{ color: { backgroundColor } }}>Copied</Text>
+            </View>
+          )}
+          <WalletAddressContainer>
+            <WalletAddressTitle>Btc Wallet Address</WalletAddressTitle>
+            {isQrCodeGenerated ? (
+              <QRCode
+                value="ddpsijdsdpsk"
+                size={200}
+                backgroundColor="white"
+                color="black"
+              />
+            ) : (
+              <Image
+                source={require("../assets/images/qrcode.png")} // You can replace this with your actual QR code
+                style={{ width: 200, height: 200 }}
+              />
+            )}
+            <DownloadQrCode onPress={handleDownloadQrCode}>
+              <Octicons name="download" size={18} color={white} />
+              <DownloadQrCodeText>Download QR Code</DownloadQrCodeText>
+            </DownloadQrCode>
+            <CryptoInputContainer>
+              <CryptoAddressInput value={walletAddress} />
+              <CryptoCopyBtn onPress={handleCopy}>
+                <ButtonText>Copy</ButtonText>
+              </CryptoCopyBtn>
+            </CryptoInputContainer>
+
+            <CryptoAddressDetails>
+              You can receive BTC with the QR code or address above. It would
+              automatically be converted and added to your account balance.
+            </CryptoAddressDetails>
+            <StyledButtonVarient>
+              <ButtonTextBlue onPress={handleOpenQrCode}>
+                View BTC rates
+              </ButtonTextBlue>
+            </StyledButtonVarient>
+          </WalletAddressContainer>
+        </MainContainer>
+      </StyledContainer>
+    </SafeAreaView>
+  );
 };
 
 export default GenerateBtcWallet;
-
-
-

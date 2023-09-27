@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { View, TouchableOpacity, Text } from "react-native";
 
@@ -27,10 +27,12 @@ import {
   ReceiptText,
 } from "../styles/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Context } from "../store/context";
 
 const { backgroundColor, inputPlaceholder, white, darkBlue } = Colors;
 
 const Wallet = ({ navigation }) => {
+  const ctx = useContext(Context);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: darkBlue }}>
       <UserWalletScreen>
@@ -39,7 +41,7 @@ const Wallet = ({ navigation }) => {
           <WalletTitle>Wallet</WalletTitle>
           <WalletBalanceTitle>Account Balance</WalletBalanceTitle>
           <WalletBalanceContent>
-            <WalletBalance>45,000.00</WalletBalance>
+            <WalletBalance>{ctx.wallet_Balance}</WalletBalance>
           </WalletBalanceContent>
           <WalletButtonContainer>
             <WalletButton onPress={() => navigation.navigate("WithdrawFund")}>
