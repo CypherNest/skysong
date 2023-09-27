@@ -126,7 +126,7 @@ const Home = ({ navigation, route }) => {
           {/* --------menu icon and username--------- */}
           <HomeMenuContainer>
             <HomeUserContainer>
-              <HomeUserName>Hello,{ctx.name} 👋</HomeUserName>
+              <HomeUserName>Hello, {ctx.name} 👋</HomeUserName>
               {/* <HomeWaveIcon
                 source={require("../assets/icons/hand.png")}
                 style={{ width: 24, height: 24 }}
