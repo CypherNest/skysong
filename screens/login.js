@@ -25,6 +25,7 @@ import {
 } from "../styles/styles";
 import { login } from "../util/auth";
 import { Context } from "../store/context";
+import { isEmail } from "../util/validator";
 
 // Destructure constants from the Colors object
 const { inputPlaceholder, backgroundColor } = Colors;
@@ -41,7 +42,12 @@ const Login = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
+  function validator(email) {
+    if (!email) throw Error("Invalid Email check your input and try again");
+  }
+
   const loginHandler = async () => {
+    validator(isEmail(userData.email));
     try {
       setIsButtonDisabled(true);
       console.log(userData);
@@ -97,7 +103,7 @@ const Login = ({ navigation }) => {
             {/* Handle submit and activity indicator */}
             {!isButtonDisabled ? (
               <StyledButton onPress={loginHandler}>
-                <ButtonText>CREATE ACCOUNT</ButtonText>
+                <ButtonText>LOG IN</ButtonText>
               </StyledButton>
             ) : (
               <StyledButton disabled={true}>
