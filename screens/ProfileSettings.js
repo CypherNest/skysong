@@ -59,6 +59,7 @@ const ProfileSettings = () => {
     email: "",
   });
   const ctx = useContext(Context);
+  const { token } = ctx;
   const [image, setImage] = useState(null);
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -84,8 +85,18 @@ const ProfileSettings = () => {
     };
     console.log(data);
     try {
-      const result = await update(data);
+      const result = await update(data, token);
       console.log(result);
+      if (result.status === "success") {
+        const params = {
+          token: result.jwtToken,
+          name: result.user.name,
+          wallet_Balance: result.user.wallet_Balance,
+          username: result.user.username,
+          email: result.user.email,
+        };
+        ctx.saveCredential(params);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -125,7 +136,7 @@ const ProfileSettings = () => {
 
             <ProfileNameContainer>
               <ProfileNameText>{ctx.name}</ProfileNameText>
-              {/* <UserNameText>@Rachael</UserNameText> */}
+              <UserNameText>@{ctx.username}</UserNameText>
             </ProfileNameContainer>
           </ProfileImageContainer>
           {/* input fields=============== */}

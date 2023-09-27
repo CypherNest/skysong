@@ -7,6 +7,7 @@ const defaultState = {
   token: "",
   wallet_Balance: "",
   email: "",
+  username: "",
 };
 
 function reducerActions(state, action) {
@@ -58,6 +59,7 @@ export default function Provider({ children }) {
     name: state.name,
     wallet_Balance: state.wallet_Balance,
     email: state.email,
+    username: state.username,
     isAuthenticated: !!state.authToken,
 
     // functions

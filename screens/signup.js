@@ -87,7 +87,7 @@ const Signup = () => {
       // setSubmitting(false);
       // setTimeout(() => {
       setIsButtonDisabled(false);
-      // }, 1000);
+      // }, 3000);
     }
   };
 

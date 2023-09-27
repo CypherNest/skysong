@@ -5,6 +5,7 @@ export const Context = createContext({
   //states
   name: "",
   token: "",
+  username: "",
   wallet_Balance: "",
   email: "",
   isAuthenticated: false,
