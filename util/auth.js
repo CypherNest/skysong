@@ -83,3 +83,15 @@ export async function generateUsdt(token) {
   );
   return response.data;
 }
+
+export async function update(token) {
+  const headers = {
+    authorization: `Bearer ${token}`,
+    "Content-Type": "Application/json",
+  };
+
+  const response = await axios.patch(`${url}/api/V1/skyshowNG/updateMe`, {
+    headers,
+  });
+  return response.data;
+}
