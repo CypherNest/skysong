@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { StatusBar, View, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Formik } from "formik";
@@ -15,10 +15,12 @@ import {
   SignupOtpText,
   MsgBox,
 } from "../styles/styles";
+import { Context } from "../store/context";
 
 const { inputPlaceholder, backgroundColor } = Colors;
 
 const SignUpOtp = ({ navigation }) => {
+  const ctx = useContext(Context);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({ name: "", balance: "" });
 
@@ -36,7 +38,7 @@ const SignUpOtp = ({ navigation }) => {
               setLoading(true);
 
               try {
-                const url = `https://1fe3-102-88-63-207.ngrok-free.app/api/V1/skyshowNG/signUp?verify=${values.otp}`;
+                const url = `https://d753-105-113-60-81.ngrok-free.app/api/V1/skyshowNG/signUp?verify=${values.otp}`;
                 const response = await axios.post(url);
                 const result = response.data.data;
                 const name = result.name;
@@ -48,6 +50,12 @@ const SignUpOtp = ({ navigation }) => {
 
                 // Check the response from your API for successful OTP verification
                 if (result.message === "confirmed") {
+                  const params = {
+                    token: response.data.jwtToken,
+                    wallet_Balance: balance,
+                    name,
+                  };
+                  ctx.saveCredential(params);
                   // Navigate to the home screen or any other screen as needed
 
                   navigation.navigate("MainContent", {

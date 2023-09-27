@@ -9,6 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import Modal from "react-native-modal";
 import { Text } from "react-native";
 import axios from "axios"; // Import Axios
+import { useContext } from "react";
 
 // ===components=========
 import LoadingBarScreen from "../components/LoadingBar";
@@ -80,9 +81,12 @@ import {
   NoticeContent,
 } from "../styles/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Context } from "../store/context";
 const { backgroundColor, inputPlaceholder, white } = Colors;
 
 const Home = ({ navigation, route }) => {
+  const ctx = useContext(Context);
+  console.log(ctx.token);
   // const { name, balance } = route.params || {};
   const { email, phoneNumber } = route.params || {};
 
@@ -122,7 +126,7 @@ const Home = ({ navigation, route }) => {
           {/* --------menu icon and username--------- */}
           <HomeMenuContainer>
             <HomeUserContainer>
-              <HomeUserName>Hello, {"gyqwq" || email} 👋</HomeUserName>
+              <HomeUserName>Hello,{ctx.name} 👋</HomeUserName>
               {/* <HomeWaveIcon
                 source={require("../assets/icons/hand.png")}
                 style={{ width: 24, height: 24 }}
@@ -144,7 +148,7 @@ const Home = ({ navigation, route }) => {
                   />
                 </IconLeft>
                 {isWalletBalanceVisible ? (
-                  <PriceText color={white}>{"0.00" || balance}</PriceText>
+                  <PriceText color={white}>{ctx.wallet_Balance}</PriceText>
                 ) : (
                   <Text>******</Text> // Display asterisks or any other hidden content
                 )}

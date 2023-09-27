@@ -53,9 +53,7 @@ const Login = ({ navigation }) => {
         wallet_Balance,
         name,
       };
-      console.log("params", params);
       ctx.saveCredential(params);
-      console.log(ctx);
       console.log(name, wallet_Balance, "57");
       console.log(result.status);
       if (result.status === "success") {

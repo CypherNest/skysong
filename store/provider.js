@@ -46,7 +46,7 @@ export default function Provider({ children }) {
 
   function saveCredential(payload) {
     console.log(payload);
-    dispatch({ type: "SAV", payload: token });
+    dispatch({ type: "SAV", payload });
   }
 
   function logout() {
@@ -56,7 +56,7 @@ export default function Provider({ children }) {
     // states
     token: state.authToken,
     name: state.name,
-    wallet_Balance: state.balance,
+    wallet_Balance: state.wallet_Balance,
     email: state.email,
     isAuthenticated: !!state.authToken,
 
