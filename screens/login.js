@@ -36,8 +36,8 @@ const Login = ({ navigation }) => {
   const ctx = useContext(Context);
 
   const [userData, setUserData] = useState({
-    email: "",
-    password: "",
+    email: "united@gmail.com",
+    password: "akanni$19",
   });
   const [errorMessage, setErrorMessage] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -48,10 +48,6 @@ const Login = ({ navigation }) => {
 
   const loginHandler = async () => {
     // testing
-    navigation.navigate("MainContent", {
-      email: userData.email,
-      phoneNumber: userData.phoneNumber,
-    });
     // validator(isEmail(userData.email));
     try {
       setIsButtonDisabled(true);
@@ -91,6 +87,7 @@ const Login = ({ navigation }) => {
             <StyledTextInput
               placeholder="Enter email"
               placeholderTextColor={inputPlaceholder}
+              value={userData.email}
               onChangeText={(text) => {
                 setUserData({ ...userData, email: text });
               }}
@@ -99,6 +96,7 @@ const Login = ({ navigation }) => {
             <StyledTextInput
               placeholder="Password"
               placeholderTextColor={inputPlaceholder}
+              value={userData.password}
               onChangeText={(text) => {
                 setUserData({ ...userData, password: text });
               }}

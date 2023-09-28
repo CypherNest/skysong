@@ -53,9 +53,8 @@ const GenerateBtcWallet = ({ navigation }) => {
     console.log(token, "token");
     try {
       const result = await generateBTC(token);
-      /// set Wallet Address here to the result response from the api
-      // set Wallet Address here to the result response from the api
-      // set Wallet Address here to the result response from the api
+      // where BTC address is stored
+      ////////////////////////////
       console.log(result, "result");
     } catch (error) {
       setisError(error.message);
@@ -100,7 +99,7 @@ const GenerateBtcWallet = ({ navigation }) => {
             <WalletAddressTitle>Btc Wallet Address</WalletAddressTitle>
             {isQrCodeGenerated ? (
               <QRCode
-                value="ddpsijdsdpsk"
+                value=""
                 size={200}
                 backgroundColor="white"
                 color="black"

@@ -88,7 +88,10 @@ const ChooseBank = ({ navigation }) => {
         setTimeout(() => {
           navigation.navigate(
             "BankCard",
-            ////// send params
+            ////// send params to next screen
+            ////// send params to next screen
+            ////// send params to next screen
+            ////// send params to next screen
             {
               accountName: result.data.AccountName,
               accountNumber: result.data.AccountNumber,

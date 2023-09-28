@@ -7,7 +7,7 @@ import axios from "axios";
 //   );
 //   return response.data;
 // };
-const url = `https://d50c-197-210-28-193.ngrok-free.app`;
+const url = `https://613b-102-89-22-196.ngrok-free.app`;
 
 export async function createUser(payload) {
   const response = await axios.post(`${url}/api/V1/skyshowNG/signUp`, payload);
@@ -119,18 +119,15 @@ export async function addBank(data, token) {
   return response.data;
 }
 
-export async function getSaveBank(data, token) {
+export async function getSavedBank(token) {
   const headers = {
     authorization: `Bearer ${token}`,
     "Content-Type": "Application/json",
   };
   //rewrite url
-  const response = await axios.get(
-    `${url}/api/V1/skyshowNG/addBank?AccountNumber=${data.number}&bankName=${data.bankName}`,
-    {
-      headers,
-    }
-  );
+  const response = await axios.get(`${url}/api/V1/skyshowNG/savedBank`, {
+    headers,
+  });
   return response.data;
 }
 

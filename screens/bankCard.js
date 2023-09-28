@@ -33,12 +33,9 @@ const BankCard = ({ navigation, route }) => {
   const [isCardDetailsOpen, setCardDetailsOpen] = useState(false);
   const [banksdetails, setBanksdetails] = useState({}); ////// params
 
-  //   const { accountName, accountNumber, bankName } = route.params;
-  //   setBanksdetails({
-  //     accountName,
-  //     accountNumber,
-  //     bankName,
-  //   });
+  //Params received from previous screen
+  //Params received from previous screen
+  const { accountName, accountNumber, bankName } = route.params;
 
   // Function to toggle the CardDetailsContainer
   const toggleCardDetails = () => {

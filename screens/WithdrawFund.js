@@ -43,33 +43,16 @@ import {
   MsgBox,
 } from "../styles/styles";
 import { Context } from "../store/context";
+import { getSavedBank } from "../util/auth";
 
 const { backgroundColor, inputPlaceholder, white } = Colors;
 
 // Sample bank data
-const bankData = [
-  { id: 1, name: "ACCESS BANK" },
-  { id: 2, name: "GTB PLC" },
-  { id: 3, name: "UNITED BANK OF AFRICA (UBA)" },
-  { id: 4, name: "STANBIC BANK" },
-  { id: 5, name: "FIRST BANK" },
-  { id: 6, name: "STERLING BANK PLC" },
-  { id: 7, name: "PROVIDUS BANK" },
-  { id: 8, name: "MONIE POINT" },
-  { id: 9, name: "PAGA MICROFIANCE BANK" },
-  { id: 10, name: "FIRST BANK" },
-  { id: 11, name: "ACCESS BANK" },
-  { id: 12, name: "GTB PLC" },
-  { id: 13, name: "UNITED BANK OF AFRICA (UBA)" },
-  { id: 14, name: "STANBIC BANK" },
-  { id: 15, name: "FIRST BANK" },
-  // Add more banks as needed
-];
 
 const WithdrawFund = ({ navigation }) => {
   const ctx = useContext(Context);
   const [isBankModalVisible, setBankModalVisible] = useState(false);
-  const [storedBanklist, setStoredBanklist] = useState([]);
+  const [saveBank, setSavedBank] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
@@ -82,16 +65,40 @@ const WithdrawFund = ({ navigation }) => {
 
   // State for the success modal
   const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
+  let results = [];
+  const bankData = [
+    { id: 1, name: "ACCESS BANK" },
+    { id: 2, name: "GTB PLC" },
+    { id: 3, name: "UNITED BANK OF AFRICA (UBA)" },
+    { id: 4, name: "STANBIC BANK" },
+    { id: 5, name: "FIRST BANK" },
+    { id: 6, name: "STERLING BANK PLC" },
+    { id: 7, name: "PROVIDUS BANK" },
+    { id: 8, name: "MONIE POINT" },
+    { id: 9, name: "PAGA MICROFIANCE BANK" },
+    { id: 10, name: "FIRST BANK" },
+    { id: 11, name: "ACCESS BANK" },
+    { id: 12, name: "GTB PLC" },
+    { id: 13, name: "UNITED BANK OF AFRICA (UBA)" },
+    { id: 14, name: "STANBIC BANK" },
+    { id: 15, name: "FIRST BANK" },
+    // Add more banks as needed
+  ];
 
   useEffect(() => {
     const data = async () => {
       try {
-        const response = await getBankList(ctx.token);
-        setStoredBanklist(response.bank);
-        // console.log(result);
-      } catch (error) {}
+        const result = await getSavedBank(ctx.token);
+        const data = result.bank;
+        setSavedBank(data);
+      } catch (error) {
+        setErrorMessage(error.message);
+      }
     };
-    data();
+
+    const timeoutId = setTimeout(data, 2000);
+
+    return () => clearTimeout(timeoutId);
   }, [userData]);
 
   // Function to show/hide the success modal
@@ -100,13 +107,13 @@ const WithdrawFund = ({ navigation }) => {
   };
 
   const submitHandler = async (values) => {
-    console.log(values);
     // toggleSuccessModal();
     try {
       setIsButtonDisabled(true);
       // check if user have enough balance to withdraw
-      if (values.amount > 3) throw Error("Insuficeint funds");
-      if (values.amount < 3) throw Error("");
+      if (values.amount > +ctx.wallet_Balance)
+        throw Error("Insufficient balance");
+      if (values.amount < +ctx.wallet_Balance) throw Error("");
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
@@ -134,6 +141,7 @@ const WithdrawFund = ({ navigation }) => {
             onSubmit={(values) => {
               values.selectedBank = selectedBank;
               submitHandler(values);
+              setUserData(values);
             }}
           >
             {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -198,7 +206,7 @@ const WithdrawFund = ({ navigation }) => {
               keyboardType="default"
             /> */}
             <FlatList
-              data={bankData}
+              data={saveBank}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
                 <TouchableOpacity
