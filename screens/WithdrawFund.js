@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { View, TouchableOpacity, Text, FlatList  } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import { Formik } from "formik";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Modal from "react-native-modal"; // Import react-native-modal
-import { Octicons } from '@expo/vector-icons';
+import { Octicons } from "@expo/vector-icons";
 
 // Import your custom styles and components here
 import {
@@ -33,8 +39,10 @@ import {
   AlertModalIcon,
   AlertModalTextSpan,
   CheckIcon,
-  MondalSearchBox
-} from '../styles/styles';
+  MondalSearchBox,
+  MsgBox,
+} from "../styles/styles";
+import { Context } from "../store/context";
 
 const { backgroundColor, inputPlaceholder, white } = Colors;
 
@@ -59,24 +67,52 @@ const bankData = [
 ];
 
 const WithdrawFund = ({ navigation }) => {
-    const [isBankModalVisible, setBankModalVisible] = useState(false);
-    const [selectedBank, setSelectedBank] = useState("");
-    const [userData, setUserData] = useState({ amount: "" });
-  
-    const toggleBankModal = () => {
-      setBankModalVisible(!isBankModalVisible);
-    };
+  const ctx = useContext(Context);
+  const [isBankModalVisible, setBankModalVisible] = useState(false);
+  const [storedBanklist, setStoredBanklist] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const [selectedBank, setSelectedBank] = useState("");
+  const [userData, setUserData] = useState({ amount: "" });
+
+  const toggleBankModal = () => {
+    setBankModalVisible(!isBankModalVisible);
+  };
 
   // State for the success modal
   const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
+
+  useEffect(() => {
+    const data = async () => {
+      try {
+        const response = await getBankList(ctx.token);
+        setStoredBanklist(response.bank);
+        // console.log(result);
+      } catch (error) {}
+    };
+    data();
+  }, [userData]);
 
   // Function to show/hide the success modal
   const toggleSuccessModal = () => {
     setSuccessModalVisible(!isSuccessModalVisible);
   };
 
-
-
+  const submitHandler = async (values) => {
+    console.log(values);
+    // toggleSuccessModal();
+    try {
+      setIsButtonDisabled(true);
+      // check if user have enough balance to withdraw
+      if (values.amount > 3) throw Error("Insuficeint funds");
+      if (values.amount < 3) throw Error("");
+    } catch (error) {
+      setErrorMessage(error.message);
+    } finally {
+      setIsButtonDisabled(false);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -89,13 +125,16 @@ const WithdrawFund = ({ navigation }) => {
             <BalanceTitle>Account Balance</BalanceTitle>
             <Balance>
               <NairaIcon />
-              <BalanceAmount>45,000.00</BalanceAmount>
+              <BalanceAmount>{ctx.wallet_Balance}</BalanceAmount>
             </Balance>
           </BalanceContainer>
           {/* Form Section */}
           <Formik
             initialValues={userData}
-            onSubmit={(values) => {}}
+            onSubmit={(values) => {
+              values.selectedBank = selectedBank;
+              submitHandler(values);
+            }}
           >
             {({ handleChange, handleBlur, handleSubmit, values }) => (
               <StyledFormArea>
@@ -117,16 +156,18 @@ const WithdrawFund = ({ navigation }) => {
                     editable={false}
                   />
                 </TouchableOpacity>
-                  <StyledButton
-                    onPress={() => {
-                      handleSubmit(); // Handle form submission
+                <MsgBox>{errorMessage}</MsgBox>
+                <StyledButton
+                  onPress={() => {
+                    handleSubmit(); // Handle form submission
 
-                      // Show the success modal
-                      toggleSuccessModal();
-                    }}
-                  >
-                    <ButtonText>WITHDRAW</ButtonText>
-                  </StyledButton>
+                    // Show the success modal
+                    // toggleSuccessModal();
+                  }}
+                >
+                  <ButtonText>WITHDRAW</ButtonText>
+                  {isButtonDisabled && <ActivityIndicator size={"large"} />}
+                </StyledButton>
               </StyledFormArea>
             )}
           </Formik>
@@ -143,20 +184,19 @@ const WithdrawFund = ({ navigation }) => {
         animationOut="slideOutDown" // Specify the animation for closing
       >
         <ModalContainer>
-           
           <InputModal>
-          <InputModalHeading>
-            <InputModalTitle>Select a Bank</InputModalTitle>
-                <CloseButton onPress={toggleBankModal}>
-                    <Octicons name="x" size={24} color="white" />
-                </CloseButton>
-          </InputModalHeading>
-          {/* search box========== */}
-          <MondalSearchBox
-             placeholder="Search"
-             placeholderTextColor={inputPlaceholder}
-             keyboardType="default"
-          />
+            <InputModalHeading>
+              <InputModalTitle>Select a Bank</InputModalTitle>
+              <CloseButton onPress={toggleBankModal}>
+                <Octicons name="x" size={24} color="white" />
+              </CloseButton>
+            </InputModalHeading>
+            {/* search box========== */}
+            {/* <MondalSearchBox
+              placeholder="Search"
+              placeholderTextColor={inputPlaceholder}
+              keyboardType="default"
+            /> */}
             <FlatList
               data={bankData}
               keyExtractor={(item) => item.id.toString()}
@@ -175,31 +215,29 @@ const WithdrawFund = ({ navigation }) => {
         </ModalContainer>
       </Modal>
 
-       {/* ==========================Success Modal ============================= */}
-       <Modal
+      {/* ==========================Success Modal ============================= */}
+      <Modal
         isVisible={isSuccessModalVisible}
-        style={{ margin: 0}}
+        style={{ margin: 0 }}
         backdropOpacity={0.5}
         animationIn="slideInUp"
         animationOut="slideOutDown"
       >
         <SuccessAlertModal>
           <AlertModalIcon onPress={toggleSuccessModal}>
-            <Octicons name="x" size={30} color= {white} />
+            <Octicons name="x" size={30} color={white} />
           </AlertModalIcon>
           <CheckIcon source={require("../assets/icons/check.png")} />
           <AlertModalText>Withdrawal is successful!</AlertModalText>
-        <AlertModalTextSpan>Extra cash sure looks good on you</AlertModalTextSpan>
+          <AlertModalTextSpan>
+            Extra cash sure looks good on you
+          </AlertModalTextSpan>
         </SuccessAlertModal>
       </Modal>
-
     </SafeAreaView>
   );
 };
 
 export default WithdrawFund;
-
-
-
 
 // style={{ backgroundColor: "white", padding: 20, borderRadius: 10 }}

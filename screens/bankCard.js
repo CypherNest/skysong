@@ -33,12 +33,12 @@ const BankCard = ({ navigation, route }) => {
   const [isCardDetailsOpen, setCardDetailsOpen] = useState(false);
   const [banksdetails, setBanksdetails] = useState({}); ////// params
 
-  const { accountName, accountNumber, bankName } = route.params;
-  setBanksdetails({
-    accountName,
-    accountNumber,
-    bankName,
-  });
+  //   const { accountName, accountNumber, bankName } = route.params;
+  //   setBanksdetails({
+  //     accountName,
+  //     accountNumber,
+  //     bankName,
+  //   });
 
   // Function to toggle the CardDetailsContainer
   const toggleCardDetails = () => {

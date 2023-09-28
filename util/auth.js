@@ -118,3 +118,33 @@ export async function addBank(data, token) {
   );
   return response.data;
 }
+
+export async function getSaveBank(data, token) {
+  const headers = {
+    authorization: `Bearer ${token}`,
+    "Content-Type": "Application/json",
+  };
+  //rewrite url
+  const response = await axios.get(
+    `${url}/api/V1/skyshowNG/addBank?AccountNumber=${data.number}&bankName=${data.bankName}`,
+    {
+      headers,
+    }
+  );
+  return response.data;
+}
+
+export async function withdraw(data, token) {
+  const headers = {
+    authorization: `Bearer ${token}`,
+    "Content-Type": "Application/json",
+  };
+
+  const response = await axios.get(
+    `${url}/api/V1/skyshowNG/withdraw?amount=${data.amount}&desc=${data.selectedBank}`,
+    {
+      headers,
+    }
+  );
+  return response.data;
+}

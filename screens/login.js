@@ -47,6 +47,11 @@ const Login = ({ navigation }) => {
   }
 
   const loginHandler = async () => {
+    // testing
+    navigation.navigate("MainContent", {
+      email: userData.email,
+      phoneNumber: userData.phoneNumber,
+    });
     // validator(isEmail(userData.email));
     try {
       setIsButtonDisabled(true);
