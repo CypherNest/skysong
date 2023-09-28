@@ -69,9 +69,6 @@ const ProfileSettings = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
-
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
@@ -83,10 +80,8 @@ const ProfileSettings = () => {
       username: userData.username,
       email: userData.email,
     };
-    console.log(data);
     try {
       const result = await update(data, token);
-      console.log(result);
       if (result.status === "success") {
         const params = {
           token: result.jwtToken,
@@ -98,7 +93,7 @@ const ProfileSettings = () => {
         ctx.saveCredential(params);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 

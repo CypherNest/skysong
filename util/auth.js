@@ -35,10 +35,6 @@ export async function login(payload) {
   return response.data;
 }
 
-export async function addBank() {
-  const response = axios.get(`${url}/api/V1/skyshowNG/addBank?acc`);
-}
-
 export async function generateBTC(token) {
   const headers = {
     authorization: `Bearer ${token}`,
@@ -93,5 +89,32 @@ export async function update(data, token) {
   const response = await axios.patch(`${url}/api/V1/skyshowNG/updateMe`, data, {
     headers,
   });
+  return response.data;
+}
+
+export async function getBankList(data, token) {
+  const headers = {
+    authorization: `Bearer ${token}`,
+    "Content-Type": "Application/json",
+  };
+
+  const response = await axios.get(`${url}/api/V1/skyshowNG/listBank`, {
+    headers,
+  });
+  return response.data;
+}
+
+export async function addBank(data, token) {
+  const headers = {
+    authorization: `Bearer ${token}`,
+    "Content-Type": "Application/json",
+  };
+
+  const response = await axios.get(
+    `${url}/api/V1/skyshowNG/addBank?AccountNumber=${data.number}&bankName=${data.bankName}`,
+    {
+      headers,
+    }
+  );
   return response.data;
 }

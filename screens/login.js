@@ -52,7 +52,6 @@ const Login = ({ navigation }) => {
       setIsButtonDisabled(true);
       const result = await login(userData);
       const { name, wallet_Balance } = result.data;
-      console.log(result);
 
       // ctx.saveCredential(params);
       if (result.status === "success") {
