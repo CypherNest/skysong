@@ -37,7 +37,7 @@ const SignUpOtp = ({ navigation }) => {
             onSubmit={async (values, { setFieldError }) => {
               setLoading(true);
               try {
-                const url = `https://613b-102-89-22-196.ngrok-free.app/api/V1/skyshowNG/signUp?verify=${values.otp}`;
+                const url = `https://3e72-102-89-40-149.ngrok-free.app/api/V1/skyshowNG/signUp?verify=${values.otp}`;
                 const response = await axios.post(url);
                 const result = response.data.data;
                 const name = result.name;

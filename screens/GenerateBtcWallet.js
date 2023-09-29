@@ -66,7 +66,7 @@ const GenerateBtcWallet = ({ navigation }) => {
   };
 
   const handleCopy = () => {
-    Clipboard.setStringAsync(walletAddress);
+    Clipboard.setStringAsync("walletAddress");
     setCopyMessageVisible(true);
     // Hide the message after a certain duration (e.g., 2 seconds)
     setTimeout(() => {
@@ -115,7 +115,7 @@ const GenerateBtcWallet = ({ navigation }) => {
               <DownloadQrCodeText>Download QR Code</DownloadQrCodeText>
             </DownloadQrCode>
             <CryptoInputContainer>
-              <CryptoAddressInput value={walletAddress} />
+              <CryptoAddressInput disable={true} value={"walletAddress"} />
               <CryptoCopyBtn onPress={handleCopy}>
                 <ButtonText>Copy</ButtonText>
               </CryptoCopyBtn>

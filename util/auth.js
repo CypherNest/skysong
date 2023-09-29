@@ -7,7 +7,9 @@ import axios from "axios";
 //   );
 //   return response.data;
 // };
-const url = `https://613b-102-89-22-196.ngrok-free.app`;
+
+`https://3e72-102-89-40-149.ngrok-free.app`;
+const url = `https://3e72-102-89-40-149.ngrok-free.app`;
 
 export async function createUser(payload) {
   const response = await axios.post(`${url}/api/V1/skyshowNG/signUp`, payload);
@@ -132,9 +134,8 @@ export async function getSavedBank(token) {
 }
 
 export async function withdraw(data, token) {
-  console.log(data);
-  let amount;
-  amount = `${data.amount}00`;
+  // let amount;
+  // amount = `${data.amount}00`;
 
   const headers = {
     authorization: `Bearer ${token}`,
@@ -142,7 +143,7 @@ export async function withdraw(data, token) {
   };
 
   const response = await axios.get(
-    `${url}/api/V1/skyshowNG/withdraw?amount=${amount}&desc=${""}&bank=${
+    `${url}/api/V1/skyshowNG/withdraw?amount=${data.amount}&desc=${""}&bank=${
       data.selectedBank
     }`,
     {
@@ -152,16 +153,14 @@ export async function withdraw(data, token) {
   return response.data;
 }
 
-export async function setPin(data, token) {
+export async function cryptoTransactionHis(token) {
   const headers = {
     authorization: `Bearer ${token}`,
     "Content-Type": "Application/json",
   };
 
   const response = await axios.get(
-    `${url}/api/V1/skyshowNG/withdraw?amount=${amount}&desc=${""}&bank=${
-      data.selectedBank
-    }`,
+    `${url}/api/V1/skyshowNG/transations_Crypo`,
     {
       headers,
     }
@@ -178,5 +177,20 @@ export async function refer(token) {
   const response = await axios.get(`${url}/api/V1/skyshowNG/refarral_link`, {
     headers,
   });
+  return response.data;
+}
+
+export async function getgiftCarfHistory(token) {
+  const headers = {
+    authorization: `Bearer ${token}`,
+    "Content-Type": "Application/json",
+  };
+
+  const response = await axios.get(
+    `${url}/api/V1/skyshowNG/transations_Crypo`,
+    {
+      headers,
+    }
+  );
   return response.data;
 }
