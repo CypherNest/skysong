@@ -131,7 +131,7 @@ const ProfileSettings = () => {
 
             <ProfileNameContainer>
               <ProfileNameText>{ctx.name}</ProfileNameText>
-              <UserNameText>{`@${ctx.username}`}</UserNameText>
+              <UserNameText>{ctx.username && `@${ctx.username}`}</UserNameText>
             </ProfileNameContainer>
           </ProfileImageContainer>
           {/* input fields=============== */}

@@ -132,13 +132,36 @@ export async function getSavedBank(token) {
 }
 
 export async function withdraw(data, token) {
+  console.log(data);
+  let amount;
+  amount = `${data.amount}00`;
+
   const headers = {
     authorization: `Bearer ${token}`,
     "Content-Type": "Application/json",
   };
 
   const response = await axios.get(
-    `${url}/api/V1/skyshowNG/withdraw?amount=${data.amount}&desc=${data.selectedBank}`,
+    `${url}/api/V1/skyshowNG/withdraw?amount=${amount}&desc=${""}&bank=${
+      data.selectedBank
+    }`,
+    {
+      headers,
+    }
+  );
+  return response.data;
+}
+
+export async function setPin(data, token) {
+  const headers = {
+    authorization: `Bearer ${token}`,
+    "Content-Type": "Application/json",
+  };
+
+  const response = await axios.get(
+    `${url}/api/V1/skyshowNG/withdraw?amount=${amount}&desc=${""}&bank=${
+      data.selectedBank
+    }`,
     {
       headers,
     }

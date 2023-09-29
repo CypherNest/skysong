@@ -6,6 +6,7 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { Formik } from "formik";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -43,7 +44,7 @@ import {
   MsgBox,
 } from "../styles/styles";
 import { Context } from "../store/context";
-import { getSavedBank } from "../util/auth";
+import { getSavedBank, withdraw } from "../util/auth";
 
 const { backgroundColor, inputPlaceholder, white } = Colors;
 
@@ -107,13 +108,27 @@ const WithdrawFund = ({ navigation }) => {
   };
 
   const submitHandler = async (values) => {
-    // toggleSuccessModal();
     try {
       setIsButtonDisabled(true);
       // check if user have enough balance to withdraw
-      if (values.amount > +ctx.wallet_Balance)
+      const balance = parseFloat(String(ctx.wallet_Balance).replace(/,/g, ""));
+      console.log(balance);
+      if (values.amount > balance) {
         throw Error("Insufficient balance");
-      if (values.amount < +ctx.wallet_Balance) throw Error("");
+      }
+      if (values.amount < balance) setErrorMessage("");
+      // send request
+      const result = await withdraw(values, ctx.token);
+      console.log(result);
+      if (result.status === "success") {
+        toggleSuccessModal();
+        ctx.saveCredential({ wallet_Balance: result.wallet_Balance });
+      } else {
+        Alert.alert(
+          "Ooops Something went wrong",
+          "check your internet connection and try again"
+        );
+      }
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
@@ -166,14 +181,14 @@ const WithdrawFund = ({ navigation }) => {
                 </TouchableOpacity>
                 <MsgBox>{errorMessage}</MsgBox>
                 <StyledButton
+                  disabled={isButtonDisabled}
                   onPress={() => {
                     handleSubmit(); // Handle form submission
-
                     // Show the success modal
                     // toggleSuccessModal();
                   }}
                 >
-                  <ButtonText>WITHDRAW</ButtonText>
+                  {!isButtonDisabled && <ButtonText>WITHDRAW</ButtonText>}
                   {isButtonDisabled && <ActivityIndicator size={"large"} />}
                 </StyledButton>
               </StyledFormArea>
