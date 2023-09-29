@@ -168,3 +168,15 @@ export async function setPin(data, token) {
   );
   return response.data;
 }
+
+export async function refer(token) {
+  const headers = {
+    authorization: `Bearer ${token}`,
+    "Content-Type": "Application/json",
+  };
+
+  const response = await axios.get(`${url}/api/V1/skyshowNG/refarral_link`, {
+    headers,
+  });
+  return response.data;
+}

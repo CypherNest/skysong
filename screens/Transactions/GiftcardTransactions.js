@@ -3,17 +3,12 @@ import { View, Text, FlatList, StyleSheet, Image } from "react-native";
 import moment from "moment"; // Import moment library
 import DummyDataSets from "../../constants/DummyDataSets";
 
+import { Colors, TransactionContent } from "../../styles/styles";
 
-import {
-   Colors,
-   TransactionContent
-  } from "../../styles/styles";
-
-
-const {backgroundColor, white, inputPlaceholder, danger, success}= Colors;
+const { backgroundColor, white, inputPlaceholder, danger, success } = Colors;
 
 const GiftCardTransaction = () => {
-  const selectedDataSet = 'transactionData';
+  const selectedDataSet = "transactionData";
   const data = DummyDataSets[selectedDataSet];
 
   // Group transactions by date using moment
@@ -27,7 +22,6 @@ const GiftCardTransaction = () => {
   }, {});
 
   const renderTransactionItem = ({ item }) => (
-    
     <View style={styles.item}>
       <Image source={require("../../assets/images/icon-logo.png")} />
       <View style={styles.transactInfo}>
@@ -38,15 +32,17 @@ const GiftCardTransaction = () => {
         <View style={styles.rateContainer}>
           <Text style={styles.rate}>N{item.price}</Text>
           <Text
-          style={[
-            styles.status,
-            item.status === 'Successful'
-              ? styles.successStatus
-              : item.status === 'Pending'
-              ? styles.pendingStatus
-              : styles.failedStatus
-          ]}
-        >{item.status}</Text>
+            style={[
+              styles.status,
+              item.status === "Successful"
+                ? styles.successStatus
+                : item.status === "Pending"
+                ? styles.pendingStatus
+                : styles.failedStatus,
+            ]}
+          >
+            {item.status}
+          </Text>
         </View>
       </View>
     </View>
@@ -83,24 +79,24 @@ const GiftCardTransaction = () => {
 
 const styles = StyleSheet.create({
   item: {
-    width: '100%',
+    width: "100%",
     padding: 16,
     marginVertical: 8,
     borderRadius: 15,
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   transactInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     gap: 70,
   },
   rateContainer: {
     paddingTop: 8,
-    display: 'flex',
+    display: "flex",
     flexDirection: "column",
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   titleContainer: {
     display: "flex",
@@ -108,8 +104,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#fff",
   },
   Date: {
     fontSize: 12,
@@ -117,11 +113,11 @@ const styles = StyleSheet.create({
     color: inputPlaceholder, //
   },
   subtitle: {
-    color: '#fff',
+    color: "#fff",
   },
   status: {
     fontSize: 11,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   successStatus: {
     color: success, // Set your success color here
@@ -134,7 +130,7 @@ const styles = StyleSheet.create({
   },
   rate: {
     fontSize: 14,
-    color: '#fff',
+    color: "#fff",
   },
   TransactionList: {
     marginBottom: 10,
@@ -144,8 +140,8 @@ const styles = StyleSheet.create({
   },
   transactionDate: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 10,
   },
 });
