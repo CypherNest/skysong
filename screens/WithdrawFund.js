@@ -130,7 +130,7 @@ const WithdrawFund = ({ navigation }) => {
         );
       }
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrorMessage("check your intenet and try again");
     } finally {
       setIsButtonDisabled(false);
     }

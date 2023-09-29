@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { View, TouchableOpacity, Text } from "react-native";
 
@@ -28,13 +28,32 @@ import {
 } from "../styles/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Context } from "../store/context";
+import { cryptoTransactionHis } from "../util/auth";
 
 const { backgroundColor, inputPlaceholder, white, darkBlue } = Colors;
 
 const Wallet = ({ navigation }) => {
   const ctx = useContext(Context);
+  const [withdrawHistory, setWithdrwHistory] = useState([]);
+  useEffect(() => {
+    const data = async () => {
+      try {
+        const response = await cryptoTransactionHis(ctx.token);
+        if (response.status === "success") {
+          setWithdrwHistory((prev) => [...prev, ...response.trns]);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    // data();
+    const timeoutId = setTimeout(data, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: darkBlue }}>
+      {console.log(withdrawHistory, "fetched")}
       <UserWalletScreen>
         <StatusBar style="light" backgroundColor={darkBlue} />
         <UserWalletContainer>
@@ -54,6 +73,7 @@ const Wallet = ({ navigation }) => {
           {/* <BreakDownContainer>
                         <BreakDownText>View Breakdown</BreakDownText>
                     </BreakDownContainer> */}
+          {/* Replace the icon with withdraw history if found */}
         </UserWalletContainer>
         <WithdrawalHistoryContainer>
           <WithdrawalText>Withdrawals</WithdrawalText>

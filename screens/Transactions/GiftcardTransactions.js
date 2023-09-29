@@ -1,13 +1,33 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet, Image } from "react-native";
 import moment from "moment"; // Import moment library
 import DummyDataSets from "../../constants/DummyDataSets";
 
 import { Colors, TransactionContent } from "../../styles/styles";
+import { getgiftCarfHistory } from "../../util/auth";
+import { Context } from "../../store/context";
 
 const { backgroundColor, white, inputPlaceholder, danger, success } = Colors;
 
 const GiftCardTransaction = () => {
+  const ctx = useContext(Context);
+  const [giftCardHistory, setGiftCardHistory] = useState([]);
+  useEffect(() => {
+    const data = async () => {
+      try {
+        const response = await getgiftCarfHistory(ctx.token);
+        if (response.status === "success") {
+          setGiftCardHistory((prev) => [...prev, ...response.trns]);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    // data();
+    const timeoutId = setTimeout(data, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
   const selectedDataSet = "transactionData";
   const data = DummyDataSets[selectedDataSet];
 
@@ -66,6 +86,8 @@ const GiftCardTransaction = () => {
 
   return (
     <View>
+      {/* replace with your actual gift card data history */}
+      {console.log(giftCardHistory)}
       <View style={styles.TransactionList}>
         <FlatList
           data={groupedDataArray}

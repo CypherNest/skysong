@@ -187,7 +187,7 @@ export async function getgiftCarfHistory(token) {
   };
 
   const response = await axios.get(
-    `${url}/api/V1/skyshowNG/transations_Crypo`,
+    `${url}/api/V1/skyshowNG/transations_GiftCard`,
     {
       headers,
     }
